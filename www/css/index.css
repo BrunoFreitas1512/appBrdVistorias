@@ -1,0 +1,75 @@
+/*header*/
+    .header > div {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        background-color: #9A0808;
+    }
+    .header img {
+        width: 80px;
+        background-color: white;
+    }
+    #menu {
+        display: none;
+    }
+    .menu {
+        text-align: right;
+        font-size: 2em;
+        color: #E78200;
+    }
+    #div-menu {
+        grid-column: span 2;
+        visibility: hidden;
+        width: 0;
+        height: 0;
+    }
+    #menu:checked ~ #div-menu {
+        visibility: visible;
+        margin-top: 10px;
+        padding: 20px;
+        width: 100%;
+        height: 100%;
+        transition: all 0.7s ease-in-out !important;
+        border-top: 1px solid #E78200;
+    }
+/*header*/
+/*contexto cadastrar*/
+    .cadastrar-vistoria {
+        padding: 40px 15px;
+    }
+    .cadastrar-vistoria > form {
+        display: grid;
+        grid-gap: 20px;
+    }
+    .cadastrar-vistoria .botaosalvar {
+        background-color: #9A0808;
+    }
+    .cadastrar-vistoria label {
+        color: #9A0808;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .cadastrar-vistoria > form > :last-child {
+        text-align: center;
+    }
+    .cadastrar-vistoria .situacao {
+        font-size: 16px;
+        color: black;
+        cursor: pointer;
+    }
+    .cadastrar-vistoria p {
+        text-align: justify;
+    }
+    .flex-divulgacao {
+        display: flex;
+        justify-content: space-around;
+    }
+/*fim contexto cadastrar*/
+/*footer*/
+    footer {
+        height: 50px;
+        width: 100%;
+        background-color: #9A0808;
+        bottom: 0;
+    }
+/*footer*/

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+        <link rel="stylesheet" href="css/fa/css/all.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/index.css">
+        <title>BRDVistorias</title>
+    </head>
+    <body>
+        <header class="header">
+            <div class="container">
+                <img src="img/logo.png" alt="">
+                <input type="checkbox" id="menu">
+                <label for="menu" class="menu">
+                    <i class="fas fa-bars"></i>
+                </label>
+                <div id="div-menu">
+                    <a href="index.html" class="text-white">HOME</a>
+                </div>
+            </div>
+        </header>
+        <div class="cadastrar-vistoria container">
+            <form id="form-app">
+                <div>
+                    <label for="salaComercial">Selecione a Sala Comercial</label>
+                    <select name="salaComercial" class="form-control" id="salacomercial">
+                        <option disabled selected style="display: none;"></option>
+                        <option value="1">valor1</option>
+                        <option value="2">Valor 3</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="data">Data</label>
+                    <input type="date" name="data" id="data" class="form-control">
+                </div>
+                <div>
+                    <label for="perguntas">Perguntas</label>
+                    <p>
+                        pergunta de fulano de tal
+                    </p>
+                    <div class="flex-divulgacao">
+                        <div>
+                            <input type="radio" value="true" name="unidade[]" id="true"/>
+                            <label for="true" class="situacao">OK</label>
+                        </div>
+                        <div>
+                            <input type="radio" value="false" name="unidade[]" id="false"/>
+                            <label for="false" class="situacao">N OK</label>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label for="comentario">Comentario</label>
+                    <textarea name="comentario" id="comentario" rows="5" class="form-control"></textarea>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-danger botaosalvar">
+                        <i class="far fa-save"></i>
+                        Salvar
+                    </button>
+                </div>
+            </form>
+        </div>
+        <footer>
+        </footer>
+        <script src="js/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/script.js"></script>
+    </body>
+</html>
