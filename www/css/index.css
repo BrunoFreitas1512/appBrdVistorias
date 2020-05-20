@@ -1,3 +1,6 @@
+body {
+    background-color: #F7F4F2;
+}
 /*header*/
     .header > div {
         display: grid;
@@ -8,29 +11,6 @@
     .header img {
         width: 80px;
         background-color: white;
-    }
-    #menu {
-        display: none;
-    }
-    .menu {
-        text-align: right;
-        font-size: 2em;
-        color: #E78200;
-    }
-    #div-menu {
-        grid-column: span 2;
-        visibility: hidden;
-        width: 0;
-        height: 0;
-    }
-    #menu:checked ~ #div-menu {
-        visibility: visible;
-        margin-top: 10px;
-        padding: 20px;
-        width: 100%;
-        height: 100%;
-        transition: all 0.7s ease-in-out !important;
-        border-top: 1px solid #E78200;
     }
 /*header*/
 /*contexto cadastrar*/
@@ -65,6 +45,136 @@
         justify-content: space-around;
     }
 /*fim contexto cadastrar*/
+/*form perguntas*/
+    #form-perguntas {
+        display: none;
+    }
+    #perguntas {
+        width: 90%;
+        margin: 0 auto;
+    }
+    #perguntas > div {
+        background-color: white;
+        padding: 10px;
+        margin: 20px 0;
+    }
+    #perguntas > div > p {
+        font-weight: bold;  
+    }
+    #perguntas > div > div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .situacao-resposta {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+    .situacao-resposta span {
+        display: block;
+        margin-left: 5px;
+    }
+    .span-btn {
+        display: inline-block;
+        margin-left: 5px;
+        font-weight: bold;
+    }
+    #form-perguntas > div:last-child {
+        text-align: center;
+    }
+    
+/*fim form perguntas*/
+
+/*form comentario*/
+    #form-comentario {
+        display: none;
+    }
+    #form-comentario > div:last-child {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .botaosalvarperguntas, .botaosalvarcomentario {
+        background-color: #9A0808;
+    }
+/*fim form comentario*/
+/*listagem*/
+    .listagem {
+        padding-bottom: 20px;
+    }
+    .listagem label {
+        color: #9A0808;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .listagem button, .listagem a {
+        background-color: transparent;
+    }
+    .listagem-vistorias p {
+        margin: 0;
+        margin-bottom: 10px;
+    }
+    .listagem-vistorias > div:first-child span {
+        color: #9A0808;
+    }
+    .listagem-vistorias {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        grid-gap: 10px;
+        align-items: center;
+        font-size: 13px;
+        padding: 10px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        background-color: white;
+    }
+    .listagem-vistorias > div:last-child {
+        display: grid;
+        align-items: center;
+        text-align: center;
+        grid-gap: 5px;
+    }
+    .listagem-vistorias > div:last-child span {
+        display: inline-block;
+        font-weight: bold;
+        font-size: 13px;
+        margin-right: 5px;
+    }
+    .listagem-perguntas {
+        grid-column: span 2;
+        display: none;
+    }
+    .listagem-perguntas > div {
+        display: grid;
+        grid-template-columns: 1fr 60px;
+        align-items: center;
+        margin-top: 10px;
+        text-align: left;
+        grid-column-gap: 10px;
+        border-top: 1px solid black;
+        padding-top: 10px;
+    }
+    .listagem-perguntas > div:last-child {
+        border-bottom: 1px solid black;
+        padding-bottom: 10px;
+    }
+    .listagem-perguntas > span {
+        padding: 10px;
+    }
+    .esp-perguntas {
+        color: #9A0808;
+        text-align: left;
+        font-size: 13px;
+        font-weight: bold;
+    }
+/*fim listagem*/
+/*parte de editar*/
+    .botaoeditarsalvar, .botaoeditarperguntas, .botaoeditarcomentario {
+        background-color: #9A0808;
+    }
+/*fim parte de editar*/
 /*footer*/
     footer {
         height: 50px;
