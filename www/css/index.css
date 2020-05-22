@@ -175,6 +175,9 @@ body {
         background-color: #9A0808;
     }
 /*fim parte de editar*/
+.alert-preencher {
+    display: none;
+}
 /*footer*/
     footer {
         height: 50px;
