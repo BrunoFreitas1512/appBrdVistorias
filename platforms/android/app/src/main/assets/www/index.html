@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+        <link rel="stylesheet" href="css/fa/css/all.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/index.css">
+        <title>BRDVistorias</title>
+    </head>
+    <body>
+        <header class="header">
+            <div class="container">
+                <img src="img/logo.png" alt="">
+            </div>
+        </header>
+        <div class="cadastrar-vistoria container">
+            <form id="form-app" method="POST">
+                <div>
+                    <label for="salaComercial">Selecione a Sala Comercial</label>
+                    <select name="salaComercial" class="form-control" id="salacomercial">
+                        <option disabled selected style="display: none;"></option>
+                    </select>
+                </div>
+                <div>
+                    <label for="data">Data</label>
+                    <input type="date" name="data" id="data" class="form-control">
+                </div>
+                <div class="hidden">
+                    <button type="submit" class="btn btn-danger botaosalvar">
+                        <i class="far fa-save"></i>
+                        Salvar
+                    </button>
+                </div>
+            </form>
+            <form id="form-perguntas" method="POST">
+                <label for="vistoria">Perguntas</label>
+                <div id="perguntas">
+                </div>
+                <div class="div-btn-perguntas">
+                    <button type="submit" class="btn btn-danger botaosalvarperguntas">
+                        <i class="far fa-save"></i>
+                        Salvar
+                    </button>
+                </div>
+            </form>
+            <form id="form-comentario" method="POST">
+                <label for="comentario">Comentario</label>
+                <div>
+                    <textarea name="comentario" id="comentario" rows="5" class="form-control"></textarea>
+                </div>
+                <div class="div-btn-comentarios">
+                    <button type="submit" class="btn btn-danger botaosalvarcomentario" id="botaosalvarcomentario">
+                        <i class="far fa-save"></i>
+                        Salvar
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="listagem container">
+            <label for="Listagem">
+                Listagem
+            </label>
+            <div id="listagem-vistorias">
+            </div>
+        </div>
+        <footer>
+        </footer>
+        <script src="js/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/script.js"></script>
+    </body>
+</html>
