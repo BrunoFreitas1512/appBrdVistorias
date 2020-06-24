@@ -26,6 +26,7 @@ var app = {
     }
 };
 var API = "https://brdvistorias.000webhostapp.com/api";
+//var API = "http://192.168.1.109:1045/api";
 $(document).ready(function() {
   // preenchimento do select de sala comerciais
   var settings = {
@@ -74,6 +75,7 @@ document.querySelector(".botaosalvar").addEventListener("click", function(event)
     var select = document.querySelector("#salacomercial");
     var valueOpition = select.options[select.selectedIndex].value;
     var data = document.querySelector('#data').value;
+    $(".listagem ").attr("style","display:none");
     console.log(data);
     if (data == "" || valueOpition == "") {
       $(".alert-preencher").attr("style","display:block");
@@ -303,8 +305,8 @@ function editaV(id) {
     var settings = {
       "async": true,
       "crossDomain": true,
-      "url": API +"/vistorias/"+id,
-      "method": "PUT",
+      "url": API +"/editaVistorias/"+id,
+      "method": "POST",
       "headers": {
         "content-type": "application/x-www-form-urlencoded"
       },
@@ -353,8 +355,8 @@ function editaP(idPergunta, idResposta, idVistoria, situacao) {
   var settings = {
     "async": true,
     "crossDomain": true,
-    "url": API +"/respostas/"+idResposta,
-    "method": "PUT",
+    "url": API +"/editaRespostas/"+idResposta,
+    "method": "POST",
     "headers": {
       "content-type": "application/x-www-form-urlencoded"
     },
@@ -400,8 +402,8 @@ function editaC(idComentario, idVistoria) {
     var settings = {
       "async": true,
       "crossDomain": true,
-      "url": API +"/comentarios/"+idComentario,
-      "method": "PUT",
+      "url": API +"/editaComentarios/"+idComentario,
+      "method": "POST",
       "headers": {
         "content-type": "application/x-www-form-urlencoded"
       },
@@ -415,7 +417,7 @@ function editaC(idComentario, idVistoria) {
       console.log(response);
       window.location.reload();
     });
-    $(".alert-preencher").attr("style","display:block");
+    $(".alert-preencher").attr("style","display:none");
   }
 }
 // parte de excluir vistoria
@@ -423,8 +425,8 @@ function excluirVistoria(id) {
   var settings = {
     "async": true,
     "crossDomain": true,
-    "url": API +"/comentarios/"+id,
-    "method": "DELETE",
+    "url": API +"/deletaComentarios/"+id,
+    "method": "POST",
     "headers": {}
   }
   $.ajax(settings).done(function (response) {
@@ -433,8 +435,8 @@ function excluirVistoria(id) {
   var settings = {
     "async": true,
     "crossDomain": true,
-    "url": API +"/respostas/"+id,
-    "method": "DELETE",
+    "url": API +"/deletaRespostas/"+id,
+    "method": "POST",
     "headers": {}
   }
   $.ajax(settings).done(function (response) {
@@ -443,8 +445,8 @@ function excluirVistoria(id) {
   var settings = {
     "async": true,
     "crossDomain": true,
-    "url": API +"/vistorias/"+id,
-    "method": "DELETE",
+    "url": API +"/deletaVistorias/"+id,
+    "method": "POST",
     "headers": {}
   }
   $.ajax(settings).done(function (response) {
@@ -452,13 +454,5 @@ function excluirVistoria(id) {
     window.location.reload();
   });
 }
-var hoje = new Date();
-var dia = hoje.getDate();
-var mes = hoje.getMonth();
-var ano = hoje.getFullYear();
-console.log(hoje);
-console.log(dia);
-console.log(mes+1);
-console.log(ano);
 
 app.initialize();

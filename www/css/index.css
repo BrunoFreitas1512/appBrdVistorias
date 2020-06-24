@@ -2,11 +2,13 @@ body {
     background-color: #F7F4F2;
 }
 /*header*/
+    .header {
+        background-color: #9A0808;
+    }
     .header > div {
         display: grid;
         grid-template-columns: 1fr 1fr;
         align-items: center;
-        background-color: #9A0808;
     }
     .header img {
         width: 80px;
