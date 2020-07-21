@@ -20,8 +20,8 @@
             </div>
         </header>
         <div class="alert-preencher alert alert-danger alert-dismissible fade show">
-            <button type="button" class="close" id="close" data-dismiss="alert">&times;</button>
-            <strong>Erro!</strong> Preencha todos os campos
+        </div>
+        <div class="alert-preencher-success alert alert-success alert-dismissible fade show">
         </div>
         <div class="cadastrar-vistoria container">
             <form id="form-app" method="POST">
@@ -33,13 +33,23 @@
                 </div>
                 <div>
                     <label for="data">Data</label>
-                    <input type="date" name="data" id="data" class="form-control">
+                    <div class="verifc-date">
+                        <input type="date" name="data" id="data" class="form-control">
+                        <button type="button" class="btn btn-warning text-white" id="confirma-data1" onclick="confirmaData();">
+                            Verifica Data
+                        </button>
+                        <button type="button" class="btn btn-warning text-white " id="confirma-data2" onclick="confirmaData();">
+                            Verifica Data
+                        </button>
+                    </div>
                 </div>
                 <div class="hidden">
-                    <button type="submit" class="btn btn-danger botaosalvar">
+                    <button type="button" class="btn btn-danger botaosalvar" onclick="salvar();">
                         <i class="far fa-save"></i>
                         Salvar
                     </button>
+                    <input type="hidden" name="date" id="teste-data" value="false">
+                    <input type="hidden" name="date" id="teste-posicao" value="0">
                 </div>
             </form>
             <form id="form-perguntas" method="POST">
@@ -50,6 +60,10 @@
                     <button type="submit" class="btn btn-danger botaosalvarperguntas">
                         <i class="far fa-save"></i>
                         Salvar
+                    </button>
+                    <button type="button" class="btn btn-warning text-white" onclick="cancelar();">
+                        <i class="far fa-window-close"></i>
+                        Cancelar
                     </button>
                 </div>
             </form>
@@ -62,6 +76,10 @@
                     <button type="submit" class="btn btn-danger botaosalvarcomentario" id="botaosalvarcomentario">
                         <i class="far fa-save"></i>
                         Salvar
+                    </button>
+                    <button type="button" class="btn btn-warning text-white" onclick="cancelar();">
+                        <i class="far fa-window-close"></i>
+                        Cancelar
                     </button>
                 </div>
             </form>

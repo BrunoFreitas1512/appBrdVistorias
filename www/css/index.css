@@ -46,6 +46,12 @@ body {
         display: flex;
         justify-content: space-around;
     }
+    .verifc-date {
+        display: flex;
+    }
+    #confirma-data2 {
+        display: none;
+    }
 /*fim contexto cadastrar*/
 /*form perguntas*/
     #form-perguntas {
@@ -87,7 +93,9 @@ body {
     #form-perguntas > div:last-child {
         text-align: center;
     }
-    
+    .span-resp {
+        font-weight: bold;
+    }
 /*fim form perguntas*/
 
 /*form comentario*/
@@ -177,7 +185,7 @@ body {
         background-color: #9A0808;
     }
 /*fim parte de editar*/
-.alert-preencher {
+.alert-preencher, .alert-preencher-success {
     display: none;
 }
 /*footer*/

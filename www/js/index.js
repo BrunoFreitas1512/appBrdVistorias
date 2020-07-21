@@ -38,11 +38,10 @@ $(document).ready(function() {
   }
   
   $.ajax(settings).done(function (response) {
-    
     indice = -1;
     response.salascomercias.forEach(project => {
       indice += 1;
-      $('#salacomercial').append('<option value="' + response.salascomercias[indice].id + '">' + response.salascomercias[indice].nome + '</option>');
+      $('#salacomercial').append(`<option value="${response.salascomercias[indice].id}">${response.salascomercias[indice].nome}</option>`);
     });
   });
   // listando vistorias
@@ -56,29 +55,99 @@ $(document).ready(function() {
   
   $.ajax(settings).done(function (response) {
     for(var i = 0; i < response.vistorias.length; i++) {
-      $('#listagem-vistorias').append('<div class="listagem-vistorias"><div><div><span>Sala Comercial</span><p>' + response.vistorias[i].nome + '</p></div>' +
-      '<div><span>Data</span><p>' + response.vistorias[i].datavistoria + '</p></div><div><span>Comentario</span><p>' + response.vistorias[i].comentario + '</p></div></div>'+
-      '<div><div><a href="#form-app" class="btn text-primary" onclick="editarVistoria(' + response.vistorias[i].idVistoria + ');"><span>Editar</span><i class="fa fa-magic"></i></a></div>'+
-      '<div><button type="button" class="btn text-danger" onclick="excluirVistoria(' + response.vistorias[i].idVistoria + ');"><span>Excluir</span><i class="fas fa-times"></i></button></div>'+
-      '<div><button type="button" class="btn text-warning" id="btn-visualizar' + response.vistorias[i].idVistoria + '" value="1" onclick="visualizarRespostas(' + response.vistorias[i].idVistoria + ');"><span>Perguntas</span><i class="fas fa-angle-down"></i></button></div></div>'+
-      '<div class="listagem-perguntas" id="listagem-perguntas' + response.vistorias[i].idVistoria + '"><h5 class="esp-perguntas" id="esp-perguntas' + response.vistorias[i].idVistoria + '" style="display: none;">Perguntas</h5></div></div>');
+      $('#listagem-vistorias').append(`<div class="listagem-vistorias"><div><div><span>Sala Comercial</span><p>${response.vistorias[i].nome}</p></div>
+      <div><span>Data</span><p>${response.vistorias[i].datavistoria}</p></div><div><span>Comentario</span><p>${response.vistorias[i].comentario}</p></div></div>
+      <div><div><a href="#form-app" class="btn text-primary" onclick="editarVistoria(${response.vistorias[i].idVistoria});"><span>Editar</span><i class="fa fa-magic"></i></a></div>
+      <div><button type="button" class="btn text-danger" onclick="excluirVistoria(${response.vistorias[i].idVistoria});"><span>Excluir</span><i class="fas fa-times"></i></button></div>
+      <div><button type="button" class="btn text-warning" id="btn-visualizar${response.vistorias[i].idVistoria}" value="1" onclick="visualizarRespostas(${response.vistorias[i].idVistoria});"><span>Perguntas</span><i class="fas fa-angle-down"></i></button></div></div>
+      <div class="listagem-perguntas" id="listagem-perguntas${response.vistorias[i].idVistoria}"><h5 class="esp-perguntas" id="esp-perguntas${response.vistorias[i].idVistoria}" style="display: none;">Perguntas</h5></div></div>`);
     }
   });
 });
-document.querySelector("#close").addEventListener("click", function(){
+// Adicionando evento no botão close do alert
+function closeA(){
   $(".alert-preencher").attr("style","display:none");
+  alertaS.style.display = "none";
+}
+// Pegando o evento do botão salvar da parte onde salva os campos sala comercial e data
+var idVistoria, alerta = document.querySelector(".alert-preencher"), alertaS = document.querySelector(".alert-preencher-success"), dataH, alerta2, dataVistoria, verifica = 0, verificaQ = 0;
+document.querySelector("#confirma-data1").addEventListener("click", function() {
+  $("#confirma-data1").attr("style","display:none");
+  $("#confirma-data2").attr("style","display:block");
 });
-var idVistoria;
-document.querySelector(".botaosalvar").addEventListener("click", function(event) {
-    // adicionando uma vistoria no banco
+document.querySelector("#confirma-data2").addEventListener("click", function() {
+  $("#confirma-data2").attr("style","display:none");
+  $("#confirma-data1").attr("style","display:block");
+});
+function confirmaData() {
+  verifica = 1;
+  verifica += 1; 
+  document.querySelector('#teste-data').value = 'false';
+  event.preventDefault();
+  var select = document.querySelector("#salacomercial");
+  var valueOpition = select.options[select.selectedIndex].value;
+  var data = document.querySelector('#data').value;
+  if(verificaQ > 1) {
+    verificaQ = 0;
+  } 
+  if (data == "" || valueOpition == "") {
+    alerta.style.display = "block";
+    alerta.innerHTML = '<strong>Erro!</strong> Preencha todos os campos! <button type="button" class="close" id="close" data-dismiss="alert" onclick="closeA();">&times;</button>';
+  } else {
+    var settings1 = {
+      "async": true,
+      "crossDomain": true,
+      "url": API +"/listaData/"+ valueOpition,
+      "method": "GET",
+      "headers": {}
+    }
+    $.ajax(settings1).done(function (response) {
+      var alerts;
+      for(let i = 0; i < response.data.length; i++) {
+        let dataV, dataC, dataComparacao, dataVc;
+        dataV = Date.parse(response.data[i].datavistoria);
+        for(let j = 0; j < 3; j++) {
+          dataComparacao = new Date(dataV + j * 24 * 60 * 60 * 1000);
+          if (Date.parse(dataComparacao) == Date.parse(data)) {
+            alertaS.style.display = "none";
+            alerta.style.display = "block";
+            alerta.innerHTML = '<strong>Erro!</strong> So pode ter uma nova vistoria apos 3 dias! <button type="button" class="close" id="close" data-dismiss="alert" onclick="closeA();">&times;</button>';
+            document.querySelector('#teste-data').value = 'true';
+            alerts = 1;
+          }
+        }
+      }
+      console.log(alerts);
+      if(alerts != 1) {
+        alerta.style.display = "none";
+        alertaS.style.display = "block";
+        alertaS.innerHTML = 'Data verificada com sucesso! <button type="button" class="close" id="close" data-dismiss="alert" onclick="closeA();">&times;</button>';
+      }
+    });
+    
+  }
+}
+
+function salvar() {
     event.preventDefault();
     var select = document.querySelector("#salacomercial");
     var valueOpition = select.options[select.selectedIndex].value;
     var data = document.querySelector('#data').value;
-    $(".listagem ").attr("style","display:none");
-    console.log(data);
+    var alerta2 = document.querySelector('#teste-data').value
+    console.log(alerta2)
+    // adicionando uma vistoria no banco   
     if (data == "" || valueOpition == "") {
-      $(".alert-preencher").attr("style","display:block");
+      alerta.style.display = "block";
+      alerta.innerHTML = '<strong>Erro!</strong> Preencha todos os campos! <button type="button" class="close" id="close" data-dismiss="alert" onclick="closeA();">&times;</button>';
+    } else if (data.length > 10) {
+      alerta.style.display = "block";
+      alerta.innerHTML = '<strong>Erro!</strong> Data incorreta! <button type="button" class="close" id="close" data-dismiss="alert" onclick="closeA();">&times;</button>';
+    } else if (verifica == 0) {
+      alerta.style.display = "block";
+      alerta.innerHTML = '<strong>Erro!</strong> Verifique a data porfavor! <button type="button" class="close" id="close" data-dismiss="alert" onclick="closeA();">&times;</button>';
+    } else if(alerta2 == 'true') {
+      alerta.style.display = "block";
+      alerta.innerHTML = '<strong>Erro!</strong> So pode ter uma nova vistoria apos 3 dias! <button type="button" class="close" id="close" data-dismiss="alert" onclick="closeA();">&times;</button>';
     } else {
       var settings = {
         "async": true,
@@ -93,7 +162,7 @@ document.querySelector(".botaosalvar").addEventListener("click", function(event)
           "salacomercial_app": valueOpition
         }
       }
-  
+    
       $.ajax(settings).done(function (response) {
         console.log(response);
         select.value = '';
@@ -121,9 +190,24 @@ document.querySelector(".botaosalvar").addEventListener("click", function(event)
           '<div class="preencher" id="situacao-' + response.perguntas[indice].id + '"></div></div>');
         });
       });
+      alertaS.style.display = "none";
       $(".alert-preencher").attr("style","display:none");
+      document.querySelector('#teste-data').value = 'false';
+      verifica = 0;
     }
-});
+}
+function cancelar() {
+  var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": API +"/ultimaVistorias",
+    "method": "GET",
+    "headers": {}
+  }
+  $.ajax(settings).done(function (response) {
+    return excluirVistoria(response.vistorias);
+  });
+}
 function adicionarResposta(idResposta, situacao) {
   var idVistoria;
   $(".btn-situacao-"+idResposta).attr("style","display:none");
@@ -194,7 +278,8 @@ document.querySelector(".botaosalvarperguntas").addEventListener('click', functi
         $("#form-comentario").attr("style","display:block");
         $(".alert-preencher").attr("style","display:none");
       } else {
-        $(".alert-preencher").attr("style","display:block");
+        alerta.style.display = "block";
+        alerta.innerHTML = '<strong>Erro!</strong> Preencha todas as perguntas! <button type="button" class="close" id="close" data-dismiss="alert" onclick="closeA();">&times;</button>';
       }
     });
   });
@@ -204,7 +289,8 @@ document.querySelector(".botaosalvarcomentario").addEventListener('click', funct
   var comentario = $('#comentario').val();
   var idVistoria;
   if (comentario == "") {
-    $(".alert-preencher").attr("style","display:block");
+    alerta.style.display = "block";
+    alerta.innerHTML = '<strong>Erro!</strong> Preencha o campo! <button type="button" class="close" id="close" data-dismiss="alert" onclick="closeA();">&times;</button>';
   } else {
     var settings = {
       "async": true,
@@ -335,13 +421,12 @@ function editaV(id) {
     $.ajax(settings).done(function (response) {
       for(var i = 0; i < response.respostas.length; i++) {
         if(response.respostas[i].situacao == 1) {
-          $('#perguntas').append('<div><p>'+ response.respostas[i].pergunta +'</p><div><div class="up-sit' + response.respostas[i].idPergunta + '"><i class="far fa-thumbs-up"></i><span>OK</span></div><button type="button" class="btn btn-success btn-situacao-' + response.respostas[i].idPergunta + '" value="' + response.respostas[i].idPergunta + '" onclick="editaP(' + response.respostas[i].idPergunta + ', ' + response.respostas[i].idRespota + ', ' + id + ', 1);"><i class="far fa-thumbs-up"></i><span class="span-btn">OK</span></button>'+
+          $('#perguntas').append('<div><p>'+ response.respostas[i].pergunta +'</p><div><div class="up-sit' + response.respostas[i].idPergunta + '"><i class="far fa-thumbs-up"></i><span class="span-resp">OK</span></div>'+
           '<button type="button" class="btn btn-danger btn-situacao-' + response.respostas[i].idPergunta + '" value="' + response.respostas[i].idPergunta + '" onclick="editaP(' + response.respostas[i].idPergunta + ', ' + response.respostas[i].idRespota + ', ' + id + ', 0);"><i class="far fa-thumbs-down"></i><span class="span-btn">N OK</span></button></div>'+ 
           '<div id="situacao-' + response.respostas[i].idPergunta + '"></div></div>');
         } else {
-          $('#perguntas').append('<div><p>'+ response.respostas[i].pergunta +'</p><div><div class="up-sit' + response.respostas[i].idPergunta + '"><i class="far fa-thumbs-down"></i><span>N OK</span></div><button type="button" class="btn btn-success btn-situacao-' + response.respostas[i].idPergunta + '" value="' + response.respostas[i].idPergunta + '" onclick="editaP(' + response.respostas[i].idPergunta + ', ' + response.respostas[i].idRespota + ', ' + id + ', 1);"><i class="far fa-thumbs-up"></i><span class="span-btn">OK</span></button>'+
-          '<button type="button" class="btn btn-danger btn-situacao-' + response.respostas[i].idPergunta + '" value="' + response.respostas[i].idPergunta + '" onclick="editaP(' + response.respostas[i].idPergunta + ', ' + response.respostas[i].idRespota + ', ' + id + ', 0);"><i class="far fa-thumbs-down"></i><span class="span-btn">N OK</span></button></div>'+ 
-          '<div id="situacao-' + response.respostas[i].idPergunta + '"></div></div>');
+          $('#perguntas').append('<div><p>'+ response.respostas[i].pergunta +'</p><div><div class="up-sit' + response.respostas[i].idPergunta + '"><i class="far fa-thumbs-down"></i><span class="span-resp">N OK</span></div><button type="button" class="btn btn-success btn-situacao-' + response.respostas[i].idPergunta + '" value="' + response.respostas[i].idPergunta + '" onclick="editaP(' + response.respostas[i].idPergunta + ', ' + response.respostas[i].idRespota + ', ' + id + ', 1);"><i class="far fa-thumbs-up"></i><span class="span-btn">OK</span></button>'+
+          '</div><div id="situacao-' + response.respostas[i].idPergunta + '"></div></div>');
         }
       }
     });
@@ -422,34 +507,34 @@ function editaC(idComentario, idVistoria) {
 }
 // parte de excluir vistoria
 function excluirVistoria(id) {
-  var settings = {
+  var settings1 = {
     "async": true,
     "crossDomain": true,
     "url": API +"/deletaComentarios/"+id,
     "method": "POST",
     "headers": {}
   }
-  $.ajax(settings).done(function (response) {
+  $.ajax(settings1).done(function (response) {
     console.log(response);
   });
-  var settings = {
+  var settings2 = {
     "async": true,
     "crossDomain": true,
     "url": API +"/deletaRespostas/"+id,
     "method": "POST",
     "headers": {}
   }
-  $.ajax(settings).done(function (response) {
+  $.ajax(settings2).done(function (response) {
     console.log(response);
   });
-  var settings = {
+  var settings3 = {
     "async": true,
     "crossDomain": true,
     "url": API +"/deletaVistorias/"+id,
     "method": "POST",
     "headers": {}
   }
-  $.ajax(settings).done(function (response) {
+  $.ajax(settings3).done(function (response) {
     console.log(response);
     window.location.reload();
   });
