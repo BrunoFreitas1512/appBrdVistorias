@@ -25,7 +25,8 @@ var app = {
         console.log('Received Event: ' + id);
     }
 };
-var API = "http://192.168.1.109:1045/api";
+var API = "https://brdvistorias.000webhostapp.com/api";
+//var API = "http://192.168.1.109:1045/api";
 $(document).ready(function() {
   // preenchimento do select de sala comerciais
   var settings = {
@@ -37,7 +38,6 @@ $(document).ready(function() {
   }
   
   $.ajax(settings).done(function (response) {
-    
     indice = -1;
     response.salascomercias.forEach(project => {
       indice += 1;
@@ -64,7 +64,9 @@ $(document).ready(function() {
     }
   });
 });
-
+document.querySelector("#close").addEventListener("click", function(){
+  $(".alert-preencher").attr("style","display:none");
+});
 var idVistoria;
 document.querySelector(".botaosalvar").addEventListener("click", function(event) {
     // adicionando uma vistoria no banco
@@ -72,47 +74,54 @@ document.querySelector(".botaosalvar").addEventListener("click", function(event)
     var select = document.querySelector("#salacomercial");
     var valueOpition = select.options[select.selectedIndex].value;
     var data = document.querySelector('#data').value;
-    var settings = {
-      "async": true,
-      "crossDomain": true,
-      "url": API +"/vistorias",
-      "method": "POST",
-      "headers": {
-        "content-type": "application/x-www-form-urlencoded"
-      },
-      "data": {
-        "datavistoria_app": data,
-        "salacomercial_app": valueOpition
+    $(".listagem ").attr("style","display:none");
+    console.log(data);
+    if (data == "" || valueOpition == "") {
+      $(".alert-preencher").attr("style","display:block");
+    } else {
+      var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": API +"/vistorias",
+        "method": "POST",
+        "headers": {
+          "content-type": "application/x-www-form-urlencoded"
+        },
+        "data": {
+          "datavistoria_app": data,
+          "salacomercial_app": valueOpition
+        }
       }
-    }
-
-    $.ajax(settings).done(function (response) {
-      console.log(response);
-      select.value = '';
-      document.querySelector('#data').value = '';
-    })
-    // retirando da tela o formulario da vistoria
-    $("#form-app").attr("style","display:none");
-    // adicionando o formulario das perguntas
-    $("#form-perguntas").attr("style","display:block");
-    // Listando as perguntas do banco
-    var indice = -1;
-    $('#perguntas').empty(); 
-    var settings = {
-      "async": true,
-      "crossDomain": true,
-      "url": API +"/perguntas",
-      "method": "GET",
-      "headers": {}
-    }
-    $.ajax(settings).done(function (response) {
-      response.perguntas.forEach(project => {
-        indice += 1;
-        $('#perguntas').append('<div><p>'+ response.perguntas[indice].pergunta +'</p><div><button type="button" class="btn btn-success btn-situacao-' + response.perguntas[indice].id + '" value="' + response.perguntas[indice].id + '" onclick="adicionarResposta(' + response.perguntas[indice].id + ', 1);"><i class="far fa-thumbs-up"></i><span class="span-btn">OK</span></button>'+
-        '<button type="button" class="btn btn-danger btn-situacao-' + response.perguntas[indice].id + '" value="' + response.perguntas[indice].id + '" onclick="adicionarResposta(' + response.perguntas[indice].id + ', 0);"><i class="far fa-thumbs-down"></i><span class="span-btn">N OK</span></button></div>'+ 
-        '<div id="situacao-' + response.perguntas[indice].id + '"></div></div>');
+  
+      $.ajax(settings).done(function (response) {
+        console.log(response);
+        select.value = '';
+        document.querySelector('#data').value = '';
+      })
+      // retirando da tela o formulario da vistoria
+      $("#form-app").attr("style","display:none");
+      // adicionando o formulario das perguntas
+      $("#form-perguntas").attr("style","display:block");
+      // Listando as perguntas do banco
+      var indice = -1;
+      $('#perguntas').empty(); 
+      var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": API +"/perguntas",
+        "method": "GET",
+        "headers": {}
+      }
+      $.ajax(settings).done(function (response) {
+        response.perguntas.forEach(project => {
+          indice += 1;
+          $('#perguntas').append('<div><p>'+ response.perguntas[indice].pergunta +'</p><div><button type="button" class="btn btn-success btn-situacao-' + response.perguntas[indice].id + '" value="' + response.perguntas[indice].id + '" onclick="adicionarResposta(' + response.perguntas[indice].id + ', 1);"><i class="far fa-thumbs-up"></i><span class="span-btn">OK</span></button>'+
+          '<button type="button" class="btn btn-danger btn-situacao-' + response.perguntas[indice].id + '" value="' + response.perguntas[indice].id + '" onclick="adicionarResposta(' + response.perguntas[indice].id + ', 0);"><i class="far fa-thumbs-down"></i><span class="span-btn">N OK</span></button></div>'+ 
+          '<div class="preencher" id="situacao-' + response.perguntas[indice].id + '"></div></div>');
+        });
       });
-    });
+      $(".alert-preencher").attr("style","display:none");
+    }
 });
 function adicionarResposta(idResposta, situacao) {
   var idVistoria;
@@ -151,16 +160,8 @@ function adicionarResposta(idResposta, situacao) {
     $('#situacao-'+idResposta).append('<div class="situacao-resposta"> <i class="far fa-thumbs-up"></i><span>OK</span></div>');
   }
 }
-
 document.querySelector(".botaosalvarperguntas").addEventListener('click', function(event){
   event.preventDefault();
-  $("#form-perguntas").attr("style","display:none");
-  $("#form-comentario").attr("style","display:block");
-});
-document.querySelector(".botaosalvarcomentario").addEventListener('click', function(event){
-  event.preventDefault();
-  var comentario = $('#comentario').val();
-  var idVistoria;
   var settings = {
     "async": true,
     "crossDomain": true,
@@ -170,26 +171,71 @@ document.querySelector(".botaosalvarcomentario").addEventListener('click', funct
   }
   
   $.ajax(settings).done(function (response) {
+    var contagem1 = 0;
+    var contagem2 = 0;
+    var idVistoria;
     idVistoria = response.vistorias;
+    console.log(idVistoria);
     var settings = {
       "async": true,
       "crossDomain": true,
-      "url": API +"/comentarios",
-      "method": "POST",
-      "headers": {
-        "content-type": "application/x-www-form-urlencoded"
-      },
-      "data": {
-        "comentario_app": comentario,
-        "vistoria_app": idVistoria
+      "url": API +"/respostas/"+idVistoria,
+      "method": "GET",
+      "headers": {}
+    }
+    $.ajax(settings).done(function (response) {
+      contagem1 = response.respostas.length;
+      document.querySelectorAll('.preencher').forEach(item => {
+        contagem2 += 1;
+      });
+      if (contagem1 == contagem2) {
+        $("#form-perguntas").attr("style","display:none");
+        $("#form-comentario").attr("style","display:block");
+        $(".alert-preencher").attr("style","display:none");
+      } else {
+        $(".alert-preencher").attr("style","display:block");
       }
+    });
+  });
+});
+document.querySelector(".botaosalvarcomentario").addEventListener('click', function(event){
+  event.preventDefault();
+  var comentario = $('#comentario').val();
+  var idVistoria;
+  if (comentario == "") {
+    $(".alert-preencher").attr("style","display:block");
+  } else {
+    var settings = {
+      "async": true,
+      "crossDomain": true,
+      "url": API +"/ultimaVistorias",
+      "method": "GET",
+      "headers": {}
     }
     
     $.ajax(settings).done(function (response) {
-      console.log(response);
-      window.location.reload();
+      idVistoria = response.vistorias;
+      var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": API +"/comentarios",
+        "method": "POST",
+        "headers": {
+          "content-type": "application/x-www-form-urlencoded"
+        },
+        "data": {
+          "comentario_app": comentario,
+          "vistoria_app": idVistoria
+        }
+      }
+      
+      $.ajax(settings).done(function (response) {
+        console.log(response);
+        window.location.reload();
+      });
     });
-  });
+    $(".alert-preencher").attr("style","display:none");
+  }
 });
 
 
@@ -252,50 +298,54 @@ function editaV(id) {
   var select = document.querySelector("#salacomercial");
   var valueOpition = select.options[select.selectedIndex].value;
   var data = document.querySelector('#data').value;
-  var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": API +"/vistorias/"+id,
-    "method": "PUT",
-    "headers": {
-      "content-type": "application/x-www-form-urlencoded"
-    },
-    "data": {
-      "datavistoria_app": data,
-      "salacomercial_app": valueOpition
-    }
-  }
-  
-  $.ajax(settings).done(function (response) {
-    console.log(response);
-  });
-  // retirando da tela o formulario da vistoria
-  $("#form-app").attr("style","display:none");
-  // adicionando o formulario das perguntas
-  $("#form-perguntas").attr("style","display:block");
-  //retirando o botao salvar das perguntas
-  $(".botaosalvarperguntas").attr("style","display:none");
-  var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": API +"/listaPerguntas/"+id,
-    "method": "GET",
-    "headers": {}
-  }
-  $.ajax(settings).done(function (response) {
-    for(var i = 0; i < response.respostas.length; i++) {
-      if(response.respostas[i].situacao == 1) {
-        $('#perguntas').append('<div><p>'+ response.respostas[i].pergunta +'</p><div><div class="up-sit' + response.respostas[i].idPergunta + '"><i class="far fa-thumbs-up"></i><span>OK</span></div><button type="button" class="btn btn-success btn-situacao-' + response.respostas[i].idPergunta + '" value="' + response.respostas[i].idPergunta + '" onclick="editaP(' + response.respostas[i].idPergunta + ', ' + response.respostas[i].idRespota + ', ' + id + ', 1);"><i class="far fa-thumbs-up"></i><span class="span-btn">OK</span></button>'+
-        '<button type="button" class="btn btn-danger btn-situacao-' + response.respostas[i].idPergunta + '" value="' + response.respostas[i].idPergunta + '" onclick="editaP(' + response.respostas[i].idPergunta + ', ' + response.respostas[i].idRespota + ', ' + id + ', 0);"><i class="far fa-thumbs-down"></i><span class="span-btn">N OK</span></button></div>'+ 
-        '<div id="situacao-' + response.respostas[i].idPergunta + '"></div></div>');
-      } else {
-        $('#perguntas').append('<div><p>'+ response.respostas[i].pergunta +'</p><div><div class="up-sit' + response.respostas[i].idPergunta + '"><i class="far fa-thumbs-down"></i><span>N OK</span></div><button type="button" class="btn btn-success btn-situacao-' + response.respostas[i].idPergunta + '" value="' + response.respostas[i].idPergunta + '" onclick="editaP(' + response.respostas[i].idPergunta + ', ' + response.respostas[i].idRespota + ', ' + id + ', 1);"><i class="far fa-thumbs-up"></i><span class="span-btn">OK</span></button>'+
-        '<button type="button" class="btn btn-danger btn-situacao-' + response.respostas[i].idPergunta + '" value="' + response.respostas[i].idPergunta + '" onclick="editaP(' + response.respostas[i].idPergunta + ', ' + response.respostas[i].idRespota + ', ' + id + ', 0);"><i class="far fa-thumbs-down"></i><span class="span-btn">N OK</span></button></div>'+ 
-        '<div id="situacao-' + response.respostas[i].idPergunta + '"></div></div>');
+  if (data == "" || valueOpition == "") {
+    $(".alert-preencher").attr("style","display:block");
+  } else {
+    var settings = {
+      "async": true,
+      "crossDomain": true,
+      "url": API +"/editaVistorias/"+id,
+      "method": "POST",
+      "headers": {
+        "content-type": "application/x-www-form-urlencoded"
+      },
+      "data": {
+        "datavistoria_app": data,
+        "salacomercial_app": valueOpition
       }
     }
-  });
-  $('.div-btn-perguntas').append('<button type="submit" class="btn btn-danger botaoeditarperguntas" onclick="editarComentario(' + id + ');"><i class="far fa-save"></i>Salvar</button>');
+    
+    $.ajax(settings).done(function (response) {
+      console.log(response);
+    });
+    // retirando da tela o formulario da vistoria
+    $("#form-app").attr("style","display:none");
+    // adicionando o formulario das perguntas
+    $("#form-perguntas").attr("style","display:block");
+    //retirando o botao salvar das perguntas
+    $(".botaosalvarperguntas").attr("style","display:none");
+    var settings = {
+      "async": true,
+      "crossDomain": true,
+      "url": API +"/listaPerguntas/"+id,
+      "method": "GET",
+      "headers": {}
+    }
+    $.ajax(settings).done(function (response) {
+      for(var i = 0; i < response.respostas.length; i++) {
+        if(response.respostas[i].situacao == 1) {
+          $('#perguntas').append('<div><p>'+ response.respostas[i].pergunta +'</p><div><div class="up-sit' + response.respostas[i].idPergunta + '"><i class="far fa-thumbs-up"></i><span class="span-resp">OK</span></div>'+
+          '<button type="button" class="btn btn-danger btn-situacao-' + response.respostas[i].idPergunta + '" value="' + response.respostas[i].idPergunta + '" onclick="editaP(' + response.respostas[i].idPergunta + ', ' + response.respostas[i].idRespota + ', ' + id + ', 0);"><i class="far fa-thumbs-down"></i><span class="span-btn">N OK</span></button></div>'+ 
+          '<div id="situacao-' + response.respostas[i].idPergunta + '"></div></div>');
+        } else {
+          $('#perguntas').append('<div><p>'+ response.respostas[i].pergunta +'</p><div><div class="up-sit' + response.respostas[i].idPergunta + '"><i class="far fa-thumbs-down"></i><span class="span-resp">N OK</span></div><button type="button" class="btn btn-success btn-situacao-' + response.respostas[i].idPergunta + '" value="' + response.respostas[i].idPergunta + '" onclick="editaP(' + response.respostas[i].idPergunta + ', ' + response.respostas[i].idRespota + ', ' + id + ', 1);"><i class="far fa-thumbs-up"></i><span class="span-btn">OK</span></button>'+
+          '</div><div id="situacao-' + response.respostas[i].idPergunta + '"></div></div>');
+        }
+      }
+    });
+    $('.div-btn-perguntas').append('<button type="submit" class="btn btn-danger botaoeditarperguntas" onclick="editarComentario(' + id + ');"><i class="far fa-save"></i>Salvar</button>');
+    $(".alert-preencher").attr("style","display:none");
+  }
 }
 function editaP(idPergunta, idResposta, idVistoria, situacao) {
   $(".btn-situacao-"+idPergunta).attr("style","display:none");
@@ -303,8 +353,8 @@ function editaP(idPergunta, idResposta, idVistoria, situacao) {
   var settings = {
     "async": true,
     "crossDomain": true,
-    "url": API +"/respostas/"+idResposta,
-    "method": "PUT",
+    "url": API +"/editaRespostas/"+idResposta,
+    "method": "POST",
     "headers": {
       "content-type": "application/x-www-form-urlencoded"
     },
@@ -338,48 +388,43 @@ function editarComentario(id) {
   }
   $.ajax(settings).done(function (response) {
     $('#comentario').val(response.comentarios[0].comentario);
-  });
-
-  var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": API +"/comentarios/"+id,
-    "method": "GET",
-    "headers": {}
-  }
-  $.ajax(settings).done(function (response) {
     $('.div-btn-comentarios').append('<button type="submit" class="btn btn-danger botaoeditarcomentario" onclick="editaC(' + response.comentarios[0].idComentario + ', ' + id + ');"><i class="far fa-save"></i>Salvar</button>');
   });
 }
 function editaC(idComentario, idVistoria) {
   event.preventDefault();
   var comentario = $("#comentario").val();
-  var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": API +"/comentarios/"+idComentario,
-    "method": "PUT",
-    "headers": {
-      "content-type": "application/x-www-form-urlencoded"
-    },
-    "data": {
-      "comentario_app": comentario,
-      "vistoria_app": idVistoria
+  if (comentario == "") {
+    $(".alert-preencher").attr("style","display:block");
+  } else {
+    var settings = {
+      "async": true,
+      "crossDomain": true,
+      "url": API +"/editaComentarios/"+idComentario,
+      "method": "POST",
+      "headers": {
+        "content-type": "application/x-www-form-urlencoded"
+      },
+      "data": {
+        "comentario_app": comentario,
+        "vistoria_app": idVistoria
+      }
     }
+    
+    $.ajax(settings).done(function (response) {
+      console.log(response);
+      window.location.reload();
+    });
+    $(".alert-preencher").attr("style","display:none");
   }
-  
-  $.ajax(settings).done(function (response) {
-    console.log(response);
-    window.location.reload();
-  });
 }
 // parte de excluir vistoria
 function excluirVistoria(id) {
   var settings = {
     "async": true,
     "crossDomain": true,
-    "url": API +"/comentarios/"+id,
-    "method": "DELETE",
+    "url": API +"/deletaComentarios/"+id,
+    "method": "POST",
     "headers": {}
   }
   $.ajax(settings).done(function (response) {
@@ -388,8 +433,8 @@ function excluirVistoria(id) {
   var settings = {
     "async": true,
     "crossDomain": true,
-    "url": API +"/respostas/"+id,
-    "method": "DELETE",
+    "url": API +"/deletaRespostas/"+id,
+    "method": "POST",
     "headers": {}
   }
   $.ajax(settings).done(function (response) {
@@ -398,8 +443,8 @@ function excluirVistoria(id) {
   var settings = {
     "async": true,
     "crossDomain": true,
-    "url": API +"/vistorias/"+id,
-    "method": "DELETE",
+    "url": API +"/deletaVistorias/"+id,
+    "method": "POST",
     "headers": {}
   }
   $.ajax(settings).done(function (response) {

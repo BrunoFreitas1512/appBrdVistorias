@@ -2,11 +2,13 @@ body {
     background-color: #F7F4F2;
 }
 /*header*/
+    .header {
+        background-color: #9A0808;
+    }
     .header > div {
         display: grid;
         grid-template-columns: 1fr 1fr;
         align-items: center;
-        background-color: #9A0808;
     }
     .header img {
         width: 80px;
@@ -85,7 +87,9 @@ body {
     #form-perguntas > div:last-child {
         text-align: center;
     }
-    
+    .span-resp {
+        font-weight: bold;
+    }
 /*fim form perguntas*/
 
 /*form comentario*/
@@ -175,6 +179,9 @@ body {
         background-color: #9A0808;
     }
 /*fim parte de editar*/
+.alert-preencher {
+    display: none;
+}
 /*footer*/
     footer {
         height: 50px;
